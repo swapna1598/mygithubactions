@@ -29,9 +29,13 @@ jobs:
       - name: Build Docker image
         run: docker build -t my-app:latest .
 
-      # Step 6: Load image into kind
-      - name: Load Docker image into kind
-        run: kind load docker-image my-app:latest --name test-cluster
+     # Create cluster and wait until ready
+      - name: Create kind cluster
+        run: kind create cluster --name test-cluster --wait 60s
+
+      # Verify nodes
+      - name: Check nodes
+        run: kubectl get nodes
 
       # Step 7: Deploy app
       - name: Deploy to Kubernetes
