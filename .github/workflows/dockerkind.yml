@@ -37,6 +37,10 @@ jobs:
       - name: Check nodes
         run: kubectl get nodes
 
+      # Load image into kind
+      - name: Load Docker image
+        run: kind load docker-image my-app:latest --name test-cluster
+
       # Step 7: Deploy app
       - name: Deploy to Kubernetes
         run: |
