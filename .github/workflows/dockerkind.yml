@@ -46,6 +46,7 @@ jobs:
         run: |
           kubectl apply -f deployment.yaml
           kubectl wait --for=condition=Ready pod -l app=my-app --timeout=60s
+          kubectl describe pod -l app=my-app
           kubectl get pods -o wide
 
       # Step 8: Show logs
