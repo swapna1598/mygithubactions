@@ -1,0 +1,50 @@
+name: Build, Test & Deploy on Kind
+
+on:
+  workflow_dispatch:
+
+jobs:
+  kind-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Docker (needed for kind)
+      - name: Set up Docker
+        uses: docker/setup-docker@v2
+
+      # Step 3: Set up kind
+      - name: Set up Kind
+        uses: engineerd/setup-kind@v0.6.0
+        with:
+          version: v0.23.0
+          cluster-name: test-cluster
+
+      # Step 4: Set up kubectl
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      # Step 5: Build Docker image
+      - name: Build Docker image
+        run: docker build -t my-app:latest .
+
+      # Step 6: Load image into kind
+      - name: Load Docker image into kind
+        run: kind load docker-image my-app:latest --name test-cluster
+
+      # Step 7: Deploy app
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f deployment.yaml
+          kubectl get pods -o wide
+
+      # Step 8: Show logs
+      - name: Show pod logs
+        run: |
+          POD_NAME=$(kubectl get pods -l app=my-app -o jsonpath="{.items[0].metadata.name}")
+          kubectl logs $POD_NAME
