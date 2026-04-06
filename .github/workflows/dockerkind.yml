@@ -41,6 +41,11 @@ jobs:
       - name: Load Docker image
         run: kind load docker-image my-app:latest --name test-cluster
 
+      - name: Verify image in kind node
+        run: |
+          echo "Listing images in kind control plane:"
+          docker exec test-cluster-control-plane crictl images | grep my-app || echo "Image not found in kind node!"
+
       # Step 7: Deploy app
       - name: Deploy and wait safely
         run: |
