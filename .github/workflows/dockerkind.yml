@@ -11,11 +11,7 @@ jobs:
       # Step 1: Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      # Step 2: Set up Docker (needed for kind)
-      - name: Set up Docker
-        uses: docker/setup-docker@v3
-
+    
       # Step 3: Set up kind
       - name: Set up Kind
         uses: engineerd/setup-kind@v0.6.0
