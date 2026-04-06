@@ -14,7 +14,7 @@ jobs:
 
       # Step 2: Set up Docker (needed for kind)
       - name: Set up Docker
-        uses: docker/setup-docker@v2
+        uses: docker/setup-docker@v3
 
       # Step 3: Set up kind
       - name: Set up Kind
